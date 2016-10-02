@@ -1,0 +1,1 @@
+FROM 892905447879.dkr.ecr.us-east-1.amazonaws.com/aurea/ace:oracle_v11gR2

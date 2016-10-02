@@ -1,0 +1,4 @@
+FROM 892905447879.dkr.ecr.us-east-1.amazonaws.com/aurea/common/oracle:11g
+RUN yum -y install net-tools mc
+RUN cd /u01/app/oracle/product/11.2/db_1/rdbms/log/ && \
+    curl --insecure --user aurea:aL4_pYf8BHW% https://main.al6.fr/bdd/oracledump10g/demo.expdp.gz -o "demo.expdp.gz" && gzip -d demo.expdp.gz

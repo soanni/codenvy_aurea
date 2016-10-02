@@ -1,0 +1,80 @@
+version: '2'
+services:
+  backend:
+    image: ut-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - QUEUE_REGION=us-east-1
+      - SCMSDK_PRODUCT_ID_URL=http://scmsdk:8000/api/1.0/get_product_id
+      - QUEUE_NAME=testnext_smoke_queue
+      - SVN_USER=service.aline.insght
+      - ENVIRONMENT=smoke-test
+      - SQLALCHEMY_MAX_OVERFLOW=5
+      - CSV_DIRECTORY=covimprv_reports/
+      - VISIBILITY_TIMEOUT=30
+      - AWS_ACCESS_KEY=AKIAIG3GGM7DXBMSO5JA
+      - AWS_SECRET_KEY=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
+      - REPO_DIR=/tmp/
+      - API_DELTA_COVERAGE=http://aline-unittest-api-dev.us-east-1.elasticbeanstalk.com/coverage/job/%s/build/0/ut/delta?old_job_id=0
+      - DFSDK_ALINE_COVERAGE_API=https://df-sdk-dev.devfactory.com/cnu/build_system/ALINE_DEV_BUILD_SYSTEM/product_version/%s/build/%s/sourcefiles
+      - INSIGHT_UI_HOST=http://localhost
+      - JAVAPARSER_PATH=/opt/worker/javaparser-utp.jar
+      - TESTING=False
+      - SCMSDK_BUGS_BY_FILE_URL=http://scmsdk:8000/api/1.0/bugsbyfile
+      - APP_HOST=0.0.0.0
+      - DFSDK_COVERAGE_API=https://df-sdk-dev.devfactory.com/cnu/build_system/TRAVIS_CI_BUILD_SYSTEM/product_version/%s/build/%s/sourcefiles
+      - APP_PORT=8080
+      - SQLALCHEMY_POOL_RECYCLE=3600
+      - API_COVERAGE=http://aline-unittest-api-dev.us-east-1.elasticbeanstalk.com/coverage/job/%s/build/0/ut/coverage
+      - SQLALCHEMY_DATABASE_URI=mysql://root:root@db:3306/testnext
+      - SQLALCHEMY_TRACK_MODIFICATIONS=True
+      - JOB_POLL_INTERVAL_IN_SEC=30
+      - FIREWALL_DB_URI=mysql://
+      - DEBUG=False
+      - COVERALLS_OVERALL_URL=https://coveralls.io/builds/%s.json
+      - SQLALCHEMY_POOL_SIZE=20
+      - COVERALLS_ALL_FILES_URL=https://coveralls.io/builds/%s/source_files.json?iDisplayLength=%s&sSearch=
+      - VISIBILITY_TIMEOUT_IN_SEC=30
+      - SVN_PASS=9U.Ae)6=-Q3tBXA#7F?F
+      - EASY_COVER_REQUEST_QUEUE_URL=https://sqs.us-east-1.amazonaws.com/495644302188/testnext_easycover_req_smoke
+      - EASY_COVER_RESPONSE_QUEUE_URL=https://sqs.us-east-1.amazonaws.com/495644302188/testnext_easycover_resp_smoke
+      - DUMMY_COVERAGE=False
+      - SCMSDK_SUBMIT_PROJECT_URL=http://scmsdk:8000/api/1.0/projects/
+      - SCMSDK_GET_PROJECT_URL=http://scmsdk:8000/api/1.0/projects/%s
+      - SCMSDK_START_PROJECT_ANALYSIS_URL=http://scmsdk:8000/api/1.0/projects/%s/restart
+      - SCMSDK_GET_PROJECT_COMMITS_URL=http://scmsdk:8000/api/1.0/get_project_commits
+      - TESTNEXT_WORKER=1
+      - TESTNEXT_API=1
+      - JOB_POLL_INTERVAL=30
+      - BUGFIX_RETRIES=10
+    links:
+      - db
+  frontend:
+    image: ut-frontend
+    environment:
+      - SQLALCHEMY_INSIGHTS_DB_URI=mysql://root:root@db:3307/testnext
+      - SQLALCHEMY_ECHO=False
+      - DEBUG=False
+      - MDMUI_SERVER=aline-mdm-dev.us-east-1.elasticbeanstalk.com
+      - KEY=asdfasdf
+      - TOKEN_EXPIRY=900
+      - LDAP_URL=ldap://10.0.70.10:389
+      - LDAP_PASSWORD=90MKvc2iCR0xP0MVmm1kqfGDYUxLR4EZx6K4FIbkRrvcSjuxxSeFDnqJrZZraHbWGaTlLHnjlLR9Ac7MTclx6ODzEurvrzQMPOFZYUTAjrJgyhfExZ7iJPZOuXpYBa
+      - BASE_DN=CN=Service - aLine Frontend (RO),CN=Users,DC=devfactory,DC=local
+      - LDAP_DN=CN=Users,DC=devfactory,DC=local
+      - COVIMPRV_URI=http://backend:8080
+      - ENVIRONMENT=smoke-test
+      - TESTING=False
+      - TESTNEXT_API=1
+    links:
+      - backend
+    ports:
+      - "8081:80"
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=testnext
+    ports:
+      - "3307:3306"
